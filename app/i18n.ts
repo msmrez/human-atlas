@@ -139,7 +139,7 @@ export const copy:Record<Locale,Copy> = {
   contextLost:'The 3D session was paused by your device. Reload to continue.',
   reload:'Reload viewer',
   anatomy:'ANATOMY',
-  contextNote:'System overview · structure identified from source anatomy',
+  contextNote:'No part-specific description in this atlas. The structure is identified from the source anatomy.',
   atlasReference:'Atlas reference',
   selectedPieces:'Selected pieces',
   included:'Included structures',
@@ -247,7 +247,7 @@ export const copy:Record<Locale,Copy> = {
   contextLost:'جلسه سه‌بعدی توسط دستگاه متوقف شد. برای ادامه دوباره بارگذاری کنید.',
   reload:'بارگذاری دوباره',
   anatomy:'آناتومی',
-  contextNote:'نمای کلی دستگاه · ساختار از آناتومی منبع شناسایی شده است',
+  contextNote:'برای این ساختار توضیح اختصاصی در اطلس نیست. نام آن از آناتومی منبع آمده است.',
   atlasReference:'شناسه اطلس',
   selectedPieces:'قطعه‌های انتخاب‌شده',
   included:'ساختارهای مشمول',
@@ -304,11 +304,17 @@ export const copy:Record<Locale,Copy> = {
  },
 };
 
-export function structureExplanation(name:string,system:SystemId,locale:Locale){
+const ORGAN_EXPLAIN_IDS:Record<string,string>={
+ FMA7088:'heart',FMA50801:'brain',FMA7197:'liver',FMA7148:'stomach',FMA7196:'spleen',
+ FMA7198:'pancreas',FMA15900:'urinary bladder',FMA7394:'trachea',FMA13295:'diaphragm',
+};
+
+export function structureExplanation(name:string,id:string,locale:Locale){
  const t=copy[locale];
- return t.organsExplained[name.toLowerCase()] ?? t.systemNames[system]?.description ?? '';
+ const key=ORGAN_EXPLAIN_IDS[id]??name.toLowerCase();
+ return t.organsExplained[key]??'';
 }
 
-export function hasOrganExplanation(name:string,locale:Locale){
- return !!copy[locale].organsExplained[name.toLowerCase()];
+export function hasOrganExplanation(name:string,id:string,locale:Locale){
+ return !!structureExplanation(name,id,locale);
 }

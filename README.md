@@ -2,12 +2,12 @@
 
 An interactive 3D anatomy explorer built with React, Three.js, and shadcn/ui. Take the BodyParts3D adult male reference apart into **2,234 individually selectable meshes**, explore **15 anatomical systems**, and search **3,432 named concepts**.
 
-**[Explore the live demo](https://human-atlas-seven.vercel.app)**
+**[Explore the live site](https://anatomy.cls9.com)**
 
 ## Explore
 
 - Orbit, zoom, and select structures directly on the body.
-- Toggle individual systems or use skeleton and organ presets.
+- Toggle individual systems, or use typical, all, skeleton, and organ presets. Typical matches the default view (body surface hidden). All includes the surface.
 - Move from assembled anatomy to a spaced inventory of every visible piece.
 - Search anatomical names, Persian names, and source identifiers.
 - Switch the interface between English and Persian (RTL).
@@ -52,7 +52,7 @@ The optional WebMCP tools expose anatomy search and inspection in compatible bro
 
 ## Languages
 
-The chrome is fully translated. Structure names in Persian come from a reviewed glossary of major organs and from [Wikidata](https://www.wikidata.org/wiki/Property:P1402) labels linked to Foundational Model of Anatomy ids. Names without a trusted Persian source stay in English. Search accepts both scripts (`heart` and `قلب`). Refresh Wikidata labels with `node scripts/fetch-fa-names.mjs`.
+The chrome is fully translated. Structure names in Persian come from a reviewed glossary of major organs and from [Wikidata](https://www.wikidata.org/wiki/Property:P1402) labels linked to Foundational Model of Anatomy ids. Names without a trusted Persian source stay in English. Search accepts both scripts (`heart` and `قلب`), plus individual piece identifiers. Persian UI type is self-hosted [Vazirmatn](https://github.com/rastikerdar/vazirmatn) so it loads without Google Fonts. Refresh Wikidata labels with `node scripts/fetch-fa-names.mjs`.
 
 Abstract FMA parent concepts such as “human body” are hidden from search so they cannot select the entire atlas.
 

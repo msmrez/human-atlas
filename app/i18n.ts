@@ -9,10 +9,11 @@ type Copy = {
  search:string;
  searchAria:string;
  aboutAria:string;
- languageAria:string;
- systems:string;
- closeSystems:string;
- all:string;
+  languageAria:string;
+  systems:string;
+  closeSystems:string;
+  all:string;
+  typical:string;
  skeleton:string;
  organs:string;
  hideAll:string;
@@ -93,10 +94,11 @@ export const copy:Record<Locale,Copy> = {
   search:'Find a structure',
   searchAria:'Search anatomy',
   aboutAria:'About this atlas',
-  languageAria:'Switch language',
+  languageAria:'Interface language',
   systems:'Systems',
   closeSystems:'Close systems',
   all:'All',
+  typical:'Typical',
   skeleton:'Skeleton',
   organs:'Organs',
   hideAll:'Hide all',
@@ -154,8 +156,8 @@ export const copy:Record<Locale,Copy> = {
   aboutKicker:'Male · BodyParts3D',
   aboutBody1:'2,234 individual meshes and 3,432 named concepts from an adult male reference anatomy.',
   aboutBody2:'This reference does not contain every human structure or variation. Named concepts can contain multiple pieces; each source mesh is rendered once.',
-  aboutBody3:'Colors and system groupings are designed for exploration. The geometry is simplified for the web, and short explanations provide general educational context. This is an anatomical reference, not a diagnostic or surgical tool.',
-  aboutNames:'Persian structure names come from a reviewed glossary of major organs and from Wikidata labels linked to Foundational Model of Anatomy identifiers. Names without a trusted Persian source stay in English.',
+  aboutBody3:'Colors and system groupings are designed for exploration. The geometry is simplified for the web. Short notes appear only for structures that have a specific description in this atlas. This is an anatomical reference, not a diagnostic or surgical tool.',
+  aboutNames:'Persian structure names come from a reviewed glossary of major organs and from Wikidata labels linked to Foundational Model of Anatomy identifiers. Names without a trusted Persian source stay in English. Search matches English names, Persian labels, and individual modeled pieces.',
   aboutSource:'Source',
   aboutLicense:'BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International.',
   datasetLicense:'Dataset license',
@@ -192,6 +194,17 @@ export const copy:Record<Locale,Copy> = {
    'urinary bladder':'A muscular reservoir in the pelvis that stores urine arriving from the kidneys through the ureters.',
    trachea:'The main airway connecting the larynx to the bronchi. Its cartilage supports keep the airway open during breathing.',
    diaphragm:'A broad muscle separating the chest and abdomen. When it contracts, it increases chest volume and helps draw air into the lungs.',
+   kidney:'A paired organ beside the spine. Each kidney filters blood, regulates fluid and electrolytes, and produces urine that drains to the bladder.',
+   'left kidney':'The left kidney lies in the upper abdomen beside the spine. It filters blood and sends urine toward the bladder through the left ureter.',
+   'right kidney':'The right kidney lies in the upper abdomen, typically a little lower than the left because of the liver. It filters blood and drains urine through the right ureter.',
+   'left lung':'The left lung has two lobes and a cardiac notch where it accommodates the heart. Gas exchange with blood takes place in its airways and alveoli.',
+   'right lung':'The right lung has three lobes and is typically slightly larger than the left. Gas exchange with blood takes place in its airways and alveoli.',
+   aorta:'The main artery leaving the left ventricle. It arches and descends to supply oxygenated blood throughout the body.',
+   femur:'The thigh bone. Each femur articulates with the hip above and with the tibia and patella at the knee.',
+   skin:'The outer covering of this reference anatomy. It forms a protective barrier and contributes to sensation and temperature regulation.',
+   prostate:'A gland below the bladder in this male reference. It contributes fluid to semen and surrounds the proximal urethra.',
+   esophagus:'A muscular tube carrying food from the pharynx to the stomach. Coordinated contractions move the bolus downward.',
+   'spinal cord':'The cord of nervous tissue in the vertebral canal. It carries signals between the brain and the body and mediates many reflexes.',
   },
  },
  fa: {
@@ -201,10 +214,11 @@ export const copy:Record<Locale,Copy> = {
   search:'یافتن ساختار',
   searchAria:'جستجوی آناتومی',
   aboutAria:'درباره این اطلس',
-  languageAria:'تغییر زبان',
+  languageAria:'زبان رابط',
   systems:'دستگاه‌ها',
   closeSystems:'بستن دستگاه‌ها',
   all:'همه',
+  typical:'معمول',
   skeleton:'اسکلت',
   organs:'اندام‌ها',
   hideAll:'پنهان کردن همه',
@@ -262,8 +276,8 @@ export const copy:Record<Locale,Copy> = {
   aboutKicker:'مرد · BodyParts3D',
   aboutBody1:'۲٬۲۳۴ مش منفرد و ۳٬۴۳۲ مفهوم نام‌گذاری‌شده از آناتومی مرجع مرد بالغ.',
   aboutBody2:'این مرجع شامل همه ساختارها یا تنوع‌های بدن انسان نیست. مفاهیم نام‌گذاری‌شده می‌توانند چند قطعه داشته باشند؛ هر مش منبع یک‌بار رسم می‌شود.',
-  aboutBody3:'رنگ‌ها و گروه‌بندی دستگاه‌ها برای کاوش طراحی شده‌اند. هندسه برای وب ساده‌سازی شده و توضیح‌های کوتاه زمینه آموزشی عمومی می‌دهند. این یک مرجع آناتومیک است، نه ابزار تشخیص یا جراحی.',
-  aboutNames:'نام فارسی ساختارها از واژه‌نامه بازبینی‌شده اندام‌های اصلی و از برچسب‌های ویکی‌داده متصل به شناسه‌های Foundational Model of Anatomy می‌آید. نام‌هایی که منبع فارسی قابل اعتماد ندارند به انگلیسی می‌مانند.',
+  aboutBody3:'رنگ‌ها و گروه‌بندی دستگاه‌ها برای کاوش طراحی شده‌اند. هندسه برای وب ساده‌سازی شده است. توضیح کوتاه فقط برای ساختارهایی می‌آید که در این اطلس یادداشت اختصاصی دارند. این یک مرجع آناتومیک است، نه ابزار تشخیص یا جراحی.',
+  aboutNames:'نام فارسی ساختارها از واژه‌نامه بازبینی‌شده اندام‌های اصلی و از برچسب‌های ویکی‌داده متصل به شناسه‌های Foundational Model of Anatomy می‌آید. نام‌هایی که منبع فارسی قابل اعتماد ندارند به انگلیسی می‌مانند. جستجو نام انگلیسی، برچسب فارسی و قطعه‌های مدل‌سازی‌شده را تطبیق می‌دهد.',
   aboutSource:'منبع',
   aboutLicense:'BodyParts3D، © مرکز پایگاه داده علوم زیستی تحت مجوز CC Attribution 4.0 International.',
   datasetLicense:'مجوز مجموعه داده',
@@ -300,6 +314,17 @@ export const copy:Record<Locale,Copy> = {
    'urinary bladder':'مخزن عضلانی در لگن که ادرار رسیده از کلیه‌ها از راه میزنای را ذخیره می‌کند.',
    trachea:'راه هوایی اصلی میان حنجره و نایژه‌ها. تکیه‌های غضروفی راه هوا را هنگام تنفس باز نگه می‌دارند.',
    diaphragm:'عضله پهنی که سینه را از شکم جدا می‌کند. با انقباض، حجم سینه را زیاد می‌کند و به ورود هوا به ریه‌ها کمک می‌کند.',
+   kidney:'اندامی جفت در دو سوی ستون فقرات. هر کلیه خون را تصفیه می‌کند، مایع و الکترولیت را تنظیم می‌کند و ادرار را به مثانه می‌فرستد.',
+   'left kidney':'کلیه چپ در بالای شکم کنار ستون فقرات قرار دارد. خون را تصفیه می‌کند و ادرار را از راه میزنای چپ به‌سوی مثانه می‌فرستد.',
+   'right kidney':'کلیه راست در بالای شکم است و معمولاً به‌خاطر کبد کمی پایین‌تر از کلیه چپ می‌نشیند. خون را تصفیه می‌کند و ادرار را از میزنای راست تخلیه می‌کند.',
+   'left lung':'ریه چپ دو لوب دارد و با بریدگی قلبی جای قلب را باز می‌گذارد. تبادل گاز با خون در راه‌های هوایی و حبابک‌های آن رخ می‌دهد.',
+   'right lung':'ریه راست سه لوب دارد و معمولاً کمی بزرگ‌تر از ریه چپ است. تبادل گاز با خون در راه‌های هوایی و حبابک‌های آن رخ می‌دهد.',
+   aorta:'سرخرگ اصلی خروجی بطن چپ. قوس می‌زند و پایین می‌رود تا خون اکسیژن‌دار را در بدن پخش کند.',
+   femur:'استخوان ران. هر استخوان ران بالا با مفصل ران و پایین با درشت‌نی و کشکک زانو مفصل می‌شود.',
+   skin:'پوشش بیرونی این آناتومی مرجع. سدی محافظ می‌سازد و در حس و تنظیم دما نقش دارد.',
+   prostate:'غده‌ای زیر مثانه در این مرجع مرد. مایعی به منی می‌افزاید و بخش نزدیک مجرای ادرار را در بر می‌گیرد.',
+   esophagus:'لوله‌ای عضلانی که غذا را از حلق به معده می‌برد. انقباض‌های هماهنگ لقمه را به پایین می‌رانند.',
+   'spinal cord':'طناب بافت عصبی در کانال مهره‌ای. سیگنال را میان مغز و بدن حمل می‌کند و بسیاری از بازتاب‌ها را میانجی می‌شود.',
   },
  },
 };
@@ -307,6 +332,9 @@ export const copy:Record<Locale,Copy> = {
 const ORGAN_EXPLAIN_IDS:Record<string,string>={
  FMA7088:'heart',FMA50801:'brain',FMA7197:'liver',FMA7148:'stomach',FMA7196:'spleen',
  FMA7198:'pancreas',FMA15900:'urinary bladder',FMA7394:'trachea',FMA13295:'diaphragm',
+ FMA7203:'kidney',FMA7205:'left kidney',FMA7204:'right kidney',
+ FMA7310:'left lung',FMA7309:'right lung',FMA3734:'aorta',FMA9611:'femur',
+ FMA7163:'skin',FMA9600:'prostate',FMA7131:'esophagus',FMA7647:'spinal cord',
 };
 
 export function structureExplanation(name:string,id:string,locale:Locale){

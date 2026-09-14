@@ -19,6 +19,7 @@ function applyDocument(locale:Locale){
  const {dir,htmlLang}=localeMeta(locale);
  document.documentElement.lang=htmlLang;
  document.documentElement.dir=dir;
+ document.title=locale==='fa'?'اطلس بدن انسان':'Human Atlas';
 }
 
 const LocaleContext=createContext<{locale:Locale;setLocale:(locale:Locale)=>void}|null>(null);

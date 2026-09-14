@@ -1,4 +1,4 @@
-import type {Concept,Part} from './anatomy';
+import type {Atlas,Concept,Part} from './anatomy';
 import glossaryFile from './data/fa-glossary.json' with {type:'json'};
 import wikidataFile from './data/wikidata-fa.json' with {type:'json'};
 import type {Locale} from './locale';
@@ -26,6 +26,12 @@ export function displayName(id:string,english:string,locale:Locale){
  return persianName(id,english) || english;
 }
 
+export function secondaryName(id:string,english:string,locale:Locale){
+ const fa=persianName(id,english);
+ if(!fa || normalizeQuery(fa)===normalizeQuery(english))return '';
+ return locale==='fa'?english:fa;
+}
+
 export function isSearchableConcept(concept:Concept){
  return concept.elements.length>0 && concept.elements.length<=MAX_SEARCHABLE_PIECES && !ABSTRACT.has(concept.name.toLowerCase());
 }
@@ -47,9 +53,26 @@ export function searchScore(id:string,english:string,query:string){
 }
 
 export function searchConcepts(concepts:Concept[],query:string){
+ return searchAtlas({concepts,parts:[]},query);
+}
+
+export function searchAtlas(atlas:Pick<Atlas,'concepts'|'parts'>,query:string){
  const term=query.trim();
- if(!term)return FEATURED.map(name=>concepts.find(c=>c.name.toLowerCase()===name)).filter((c):c is Concept=>!!c);
- return concepts.filter(c=>isSearchableConcept(c)&&matchesQuery(c.id,c.name,term)).sort((a,b)=>searchScore(a.id,a.name,term)-searchScore(b.id,b.name,term)).slice(0,80);
+ if(!term)return FEATURED.map(name=>atlas.concepts.find(c=>c.name.toLowerCase()===name)).filter((c):c is Concept=>!!c);
+ const conceptHits=atlas.concepts.filter(c=>isSearchableConcept(c)&&matchesQuery(c.id,c.name,term));
+ const covered=new Set(conceptHits.flatMap(c=>c.elements));
+ const partHits:Concept[]=[];
+ for(const part of atlas.parts){
+  if(covered.has(part.id))continue;
+  if(!matchesQuery(part.conceptId,part.name,term)&&!matchesQuery(part.id,part.name,term))continue;
+  covered.add(part.id);
+  partHits.push({id:part.conceptId,name:part.name,elements:[part.id]});
+ }
+ return [...conceptHits,...partHits].sort((a,b)=>{
+  const score=searchScore(a.id,a.name,term)-searchScore(b.id,b.name,term);
+  if(score)return score;
+  return b.elements.length-a.elements.length;
+ }).slice(0,80);
 }
 
 export function conceptLabel(concept:Concept,locale:Locale){

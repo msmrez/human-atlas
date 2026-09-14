@@ -9,7 +9,8 @@ An interactive 3D anatomy explorer built with React, Three.js, and shadcn/ui. Ta
 - Orbit, zoom, and select structures directly on the body.
 - Toggle individual systems or use skeleton and organ presets.
 - Move from assembled anatomy to a spaced inventory of every visible piece.
-- Search anatomical names and source identifiers.
+- Search anatomical names, Persian names, and source identifiers.
+- Switch the interface between English and Persian (RTL).
 - Isolate a selected structure and read its details.
 - Use compact controls and detail panels on mobile.
 
@@ -48,6 +49,12 @@ This is an educational explorer, not a diagnostic or surgical tool.
 Geometry is merged into batches. Per-structure GPU textures control translation, visibility, and selection, while component geometry supports accurate picking. Exploded layouts pack only the visible pieces. Rendering updates when the scene changes; orbit controls remain responsive without thousands of separate draw calls.
 
 The optional WebMCP tools expose anatomy search and inspection in compatible browsers. The visible interface works without them.
+
+## Languages
+
+The chrome is fully translated. Structure names in Persian come from a reviewed glossary of major organs and from [Wikidata](https://www.wikidata.org/wiki/Property:P1402) labels linked to Foundational Model of Anatomy ids. Names without a trusted Persian source stay in English. Search accepts both scripts (`heart` and `قلب`). Refresh Wikidata labels with `node scripts/fetch-fa-names.mjs`.
+
+Abstract FMA parent concepts such as “human body” are hidden from search so they cannot select the entire atlas.
 
 ## Rebuilding geometry
 

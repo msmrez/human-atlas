@@ -3,6 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {createExplosionLayout} from '../app/explosion-layout.ts';
 import {PointerTap} from '../app/pointer-tap.ts';
 import {atlasTools} from '../app/agent-tools.ts';
+import {searchConcepts} from '../app/names.ts';
 
 for (const file of ['atlas.json']) {
   const atlas=JSON.parse(await readFile(new URL(`../public/models/${file}`,import.meta.url)));
@@ -29,6 +30,10 @@ for (const file of ['atlas.json']) {
   assert.throws(()=>inspect.execute({id:'nonexistent-structure'}));
   assert.equal(selected,previous);
   assert.throws(()=>find.execute({query:' '}));
+  const persian=searchConcepts(atlas.concepts,'قلب');
+  assert.ok(persian.some(c=>c.name==='heart'));
+  assert.equal(searchConcepts(atlas.concepts,'physical anatomical entity').length,0);
+  assert.equal(searchConcepts(atlas.concepts,'human body').length,0);
   console.log(`${file}: packing at desktop/mobile aspect ratios and search/inspection contracts passed.`);
 }
 const tap=new PointerTap();

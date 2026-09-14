@@ -86,3 +86,46 @@ h1 .edition{font-family:inherit;font-weight:500;font-size:10px;letter-spacing:.0
 @media(max-width:767px){body:has(.detail-sheet) .view-controls{visibility:hidden}}
 
 @media(max-height:600px) and (orientation:landscape){body:has(.detail-sheet) .bottom-dock{left:12px;right:324px;width:auto;transform:none;max-width:none;margin:0}}
+
+.locale-toggle{min-width:44px;font-weight:600;letter-spacing:.04em}
+html[dir=rtl]{font-family:Tahoma,"Segoe UI","Geeza Pro","Noto Naskh Arabic",sans-serif}
+html[dir=rtl] .eyebrow,html[dir=rtl] .scene-caption{letter-spacing:.04em}
+html[dir=rtl] .search-result-name,html[dir=rtl] .structure-title,html[dir=rtl] .part-hover{text-transform:none}
+html[dir=rtl] .identity{left:auto;right:32px}
+html[dir=rtl] .top-actions{right:auto;left:30px}
+html[dir=rtl] .layers-panel{left:auto;right:30px}
+html[dir=rtl] .search-panel{right:auto;left:30px}
+html[dir=rtl] .view-controls{right:auto;left:30px}
+html[dir=rtl] .detail-sheet{right:auto!important;left:95px!important}
+html[dir=rtl] .about-sheet{border-radius:0 16px 16px 0}
+html[dir=rtl] .system-name,html[dir=rtl] .member-list button{text-align:right}
+html[dir=rtl] .system-count{margin-left:0;margin-right:auto}
+html[dir=rtl] .primary-action svg:last-child{margin-left:0;margin-right:auto}
+html[dir=rtl] .dock-reset{border-left:0;border-right:1px solid #18253618;padding:10px 20px 10px 0}
+html[dir=rtl] .dock-layers{border-right:0;border-left:1px solid #18253618;padding:9px 0 9px 12px}
+html[dir=rtl] .detail-header{padding-right:0;padding-left:20px}
+html[dir=rtl] .detail-sheet .eyebrow{padding-right:0;padding-left:28px}
+html[dir=rtl] .detail-sheet [data-slot=sheet-close],html[dir=rtl] .about-sheet [data-slot=sheet-close]{right:auto;left:10px}
+html[dir=rtl] .top-actions kbd{margin-left:0;margin-right:18px}
+@media(max-width:1000px){
+ html[dir=rtl] .layers-panel{right:20px;left:auto}
+ html[dir=rtl] .identity{right:22px;left:auto}
+ html[dir=rtl] .top-actions{left:20px;right:auto}
+ html[dir=rtl] .detail-sheet{left:80px!important;right:auto!important}
+ html[dir=rtl] .view-controls{left:20px;right:auto}
+}
+@media(max-width:767px){
+ html[dir=rtl] .identity{right:max(16px,env(safe-area-inset-right));left:auto}
+ html[dir=rtl] .top-actions{left:max(12px,env(safe-area-inset-left));right:auto}
+ html[dir=rtl] .layers-panel.mobile-open,html[dir=rtl] .search-panel,html[dir=rtl] .detail-sheet{left:12px!important;right:12px!important}
+ html[dir=rtl] .view-controls{left:12px;right:12px}
+}
+@media(max-height:600px) and (orientation:landscape){
+ html[dir=rtl] .identity{right:20px;left:auto}
+ html[dir=rtl] .top-actions{left:16px;right:auto}
+ html[dir=rtl] .layers-panel.mobile-open{right:max(12px,env(safe-area-inset-right));left:auto}
+ html[dir=rtl] .detail-sheet{left:15px!important;right:auto!important}
+ html[dir=rtl] .view-controls{left:max(12px,env(safe-area-inset-left));right:auto}
+ html[dir=rtl] body:has(.detail-sheet) .bottom-dock{right:12px;left:324px}
+}
+

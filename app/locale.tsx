@@ -1,4 +1,5 @@
 import {createContext,useContext,useEffect,useMemo,useState,type ReactNode} from 'react';
+import {markStandaloneDocument} from './install';
 
 export type Locale = 'en'|'fa';
 const STORAGE_KEY = 'human-atlas-locale';
@@ -20,6 +21,9 @@ function applyDocument(locale:Locale){
  document.documentElement.lang=htmlLang;
  document.documentElement.dir=dir;
  document.title=locale==='fa'?'اطلس بدن انسان':'Human Atlas';
+ const appleTitle=document.querySelector('meta[name="apple-mobile-web-app-title"]');
+ if(appleTitle)appleTitle.setAttribute('content',locale==='fa'?'اطلس':'Atlas');
+ markStandaloneDocument();
 }
 
 const LocaleContext=createContext<{locale:Locale;setLocale:(locale:Locale)=>void}|null>(null);

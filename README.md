@@ -13,7 +13,7 @@ An interactive 3D anatomy explorer built with React, Three.js, and shadcn/ui. Ta
 - Switch the interface between English and Persian (RTL).
 - Isolate a selected structure and read its details.
 - Export the current view or a selected structure as JPEG, PNG, or WebP.
-- Use compact controls and detail panels on mobile.
+- Install it to the Home Screen as a standalone app (PWA). Controls are sized for phones, including iPhone safe areas.
 
 ## Run locally
 

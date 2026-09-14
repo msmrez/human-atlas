@@ -51,4 +51,17 @@ assert.equal(exportSlug('Left femur'),'left-femur');
 assert.equal(exportFilename('heart','FMA7088','jpeg'),'human-atlas-heart-FMA7088.jpg');
 assert.equal(exportFilename('view',undefined,'png'),'human-atlas-view.png');
 assert.equal(exportFilename('قلب','FMA7088','webp'),'human-atlas-قلب-FMA7088.webp');
-console.log('Tap, drag, multitouch, cancellation, empty-view, and export filename checks passed.');
+const manifest=JSON.parse(await readFile(new URL('../public/manifest.webmanifest',import.meta.url)));
+assert.equal(manifest.display,'standalone');
+assert.equal(manifest.start_url,'/');
+assert.ok(manifest.icons.some(icon=>icon.sizes==='192x192'));
+assert.ok(manifest.icons.some(icon=>icon.purpose==='maskable'));
+for (const file of ['icon-192.png','icon-512.png','maskable-512.png']) {
+  const buf=await readFile(new URL(`../public/icons/${file}`,import.meta.url));
+  assert.ok(buf[0]===0x89&&buf[1]===0x50&&buf[2]===0x4e&&buf[3]===0x47);
+}
+const apple=await readFile(new URL('../public/apple-touch-icon.png',import.meta.url));
+assert.ok(apple[0]===0x89&&apple[1]===0x50);
+const sw=await readFile(new URL('../public/sw.js',import.meta.url),'utf8');
+assert.ok(sw.includes('fetch'));
+console.log('Tap, drag, multitouch, cancellation, empty-view, export filename, and PWA contracts passed.');

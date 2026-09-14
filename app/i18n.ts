@@ -73,6 +73,11 @@ type Copy = {
  exportWebp:string;
  exportCredit:string;
  exportFailed:string;
+ installTitle:string;
+ installAction:string;
+ installLater:string;
+ installIos:string;
+ aboutInstall:string;
  aboutEyebrow:string;
  aboutTitle:string;
  aboutLead:string;
@@ -166,6 +171,11 @@ export const copy:Record<Locale,Copy> = {
   exportWebp:'WebP',
   exportCredit:'BodyParts3D · CC BY 4.0',
   exportFailed:'Could not export the image. Wait for the anatomy to finish loading, then try again.',
+  installTitle:'Add Human Atlas to your Home Screen',
+  installAction:'Install',
+  installLater:'Not now',
+  installIos:'On iPhone, tap Share, then Add to Home Screen.',
+  aboutInstall:'Install this atlas like an app. On Android, tap Install. On iPhone, open Share and choose Add to Home Screen. The 3D anatomy stays on the device after the first visit.',
   aboutEyebrow:'SOURCE & SCOPE',
   aboutTitle:'A body, revealed.',
   aboutLead:'Explore the adult male reference anatomy from BodyParts3D.',
@@ -294,6 +304,11 @@ export const copy:Record<Locale,Copy> = {
   exportWebp:'WebP',
   exportCredit:'BodyParts3D · CC BY 4.0',
   exportFailed:'خروجی تصویر گرفته نشد. صبر کنید آناتومی کامل بارگذاری شود، بعد دوباره تلاش کنید.',
+  installTitle:'اطلس بدن انسان را به صفحهٔ اصلی اضافه کنید',
+  installAction:'نصب',
+  installLater:'بعداً',
+  installIos:'در آیفون، اشتراک‌گذاری را بزنید، بعد «افزودن به صفحهٔ اصلی» را انتخاب کنید.',
+  aboutInstall:'این اطلس مثل یک برنامه نصب می‌شود. در اندروید Install را بزنید. در آیفون اشتراک‌گذاری را باز کنید و «افزودن به صفحهٔ اصلی» را انتخاب کنید. بعد از اولین بازدید، آناتومی سه‌بعدی روی دستگاه می‌ماند.',
   aboutEyebrow:'منبع و دامنه',
   aboutTitle:'بدن، آشکار.',
   aboutLead:'آناتومی مرجع مرد بالغ از BodyParts3D را بکاوید.',

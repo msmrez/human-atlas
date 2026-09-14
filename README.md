@@ -12,6 +12,7 @@ An interactive 3D anatomy explorer built with React, Three.js, and shadcn/ui. Ta
 - Search anatomical names, Persian names, and source identifiers.
 - Switch the interface between English and Persian (RTL).
 - Isolate a selected structure and read its details.
+- Export the current view or a selected structure as JPEG, PNG, or WebP.
 - Use compact controls and detail panels on mobile.
 
 ## Run locally

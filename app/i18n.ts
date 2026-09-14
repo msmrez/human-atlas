@@ -65,6 +65,14 @@ type Copy = {
  isolate:string;
  showSurrounding:string;
  clear:string;
+ exportAria:string;
+ exportView:string;
+ exportStructure:string;
+ exportJpeg:string;
+ exportPng:string;
+ exportWebp:string;
+ exportCredit:string;
+ exportFailed:string;
  aboutEyebrow:string;
  aboutTitle:string;
  aboutLead:string;
@@ -150,6 +158,14 @@ export const copy:Record<Locale,Copy> = {
   isolate:'Isolate structure',
   showSurrounding:'Show surrounding anatomy',
   clear:'Clear selection',
+  exportAria:'Export image',
+  exportView:'This view',
+  exportStructure:'This structure',
+  exportJpeg:'JPEG',
+  exportPng:'PNG',
+  exportWebp:'WebP',
+  exportCredit:'BodyParts3D · CC BY 4.0',
+  exportFailed:'Could not export the image. Wait for the anatomy to finish loading, then try again.',
   aboutEyebrow:'SOURCE & SCOPE',
   aboutTitle:'A body, revealed.',
   aboutLead:'Explore the adult male reference anatomy from BodyParts3D.',
@@ -270,6 +286,14 @@ export const copy:Record<Locale,Copy> = {
   isolate:'جدا کردن ساختار',
   showSurrounding:'نمایش آناتومی اطراف',
   clear:'پاک کردن انتخاب',
+  exportAria:'خروجی تصویر',
+  exportView:'همین نما',
+  exportStructure:'همین ساختار',
+  exportJpeg:'JPEG',
+  exportPng:'PNG',
+  exportWebp:'WebP',
+  exportCredit:'BodyParts3D · CC BY 4.0',
+  exportFailed:'خروجی تصویر گرفته نشد. صبر کنید آناتومی کامل بارگذاری شود، بعد دوباره تلاش کنید.',
   aboutEyebrow:'منبع و دامنه',
   aboutTitle:'بدن، آشکار.',
   aboutLead:'آناتومی مرجع مرد بالغ از BodyParts3D را بکاوید.',

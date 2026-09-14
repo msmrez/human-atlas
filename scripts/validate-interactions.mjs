@@ -4,6 +4,7 @@ import {createExplosionLayout} from '../app/explosion-layout.ts';
 import {PointerTap} from '../app/pointer-tap.ts';
 import {atlasTools} from '../app/agent-tools.ts';
 import {searchAtlas,searchConcepts} from '../app/names.ts';
+import {exportFilename,exportSlug} from '../app/export-image.ts';
 
 for (const file of ['atlas.json']) {
   const atlas=JSON.parse(await readFile(new URL(`../public/models/${file}`,import.meta.url)));
@@ -46,4 +47,8 @@ tap.down(1,10,10,12);tap.down(2,20,20,12);assert.equal(tap.up(2,20,20),false);as
 tap.down(1,10,10,5);tap.cancel(1);assert.equal(tap.up(1,10,10),false);
 tap.down(1,10,10,5);assert.equal(tap.up(1,10,10),true);
 assert.equal(createExplosionLayout([]).cells.size,0);
-console.log('Tap, drag, multitouch, cancellation, and empty-view checks passed.');
+assert.equal(exportSlug('Left femur'),'left-femur');
+assert.equal(exportFilename('heart','FMA7088','jpeg'),'human-atlas-heart-FMA7088.jpg');
+assert.equal(exportFilename('view',undefined,'png'),'human-atlas-view.png');
+assert.equal(exportFilename('قلب','FMA7088','webp'),'human-atlas-قلب-FMA7088.webp');
+console.log('Tap, drag, multitouch, cancellation, empty-view, and export filename checks passed.');

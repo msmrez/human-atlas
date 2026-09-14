@@ -1,24 +1,28 @@
-import {useEffect,useRef} from 'react';
+import {forwardRef,useEffect,useImperativeHandle,useRef} from 'react';
 import * as T from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {createExplosionLayout} from './explosion-layout';
+import {copyCanvas,type CaptureRequest} from './export-image';
 import {decodeModelResponse} from './model-download';
 import {PointerTap} from './pointer-tap';
 import {SYSTEMS,type Atlas,type SceneState} from './anatomy';
 interface Props {atlas:Atlas;state:SceneState;rtl?:boolean;partName:(id:string)=>string;messages:{webgl:string;assemble:string;incomplete:string;contextLost:string;canvasAria:string};onSelect:(id:string)=>void;onProgress:(n:number)=>void;onError:(s:string)=>void}
+export type AnatomySceneHandle={capture:(request:CaptureRequest)=>Promise<HTMLCanvasElement>};
 const lut=(texture:T.DataTexture)=>{texture.magFilter=T.NearestFilter;texture.minFilter=T.NearestFilter;texture.generateMipmaps=false;texture.wrapS=T.ClampToEdgeWrapping;texture.wrapT=T.ClampToEdgeWrapping;texture.needsUpdate=true;return texture;};
-export default function AnatomyScene({atlas,state,rtl=false,partName,messages,onSelect,onProgress,onError}:Props){
+const AnatomyScene=forwardRef<AnatomySceneHandle,Props>(function AnatomyScene({atlas,state,rtl=false,partName,messages,onSelect,onProgress,onError},ref){
  const host=useRef<HTMLDivElement>(null),latest=useRef(state),select=useRef(onSelect),names=useRef(partName),copy=useRef(messages),dir=useRef(rtl);
+ const captureFn=useRef<AnatomySceneHandle['capture']>(async()=>{throw new Error('not-ready');});
  latest.current=state;select.current=onSelect;names.current=partName;copy.current=messages;dir.current=rtl;
+ useImperativeHandle(ref,()=>({capture:request=>captureFn.current(request)}),[]);
  useEffect(()=>{
   const el=host.current!;let disposed=false,frame=0,dirty=true,ready=false,lastView='',lastReset=-1,lastIsolate='',layoutKey='',amount=0,hasSolidVisible=false;
   let lastState:SceneState|null=null;
   const systemById=new Map(atlas.parts.map(p=>[p.id,p.system]));
   const abort=new AbortController();
   let renderer:T.WebGLRenderer;
-  try{renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});}catch{onError(copy.current.webgl);return;}
+  try{renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});}catch{onError(copy.current.webgl);return;}
   renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<768?1.5:2));renderer.setClearColor('#f2f3f3');renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;el.appendChild(renderer.domElement);
   renderer.domElement.setAttribute('aria-label',copy.current.canvasAria);
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(34,1,.005,100),controls=new OrbitControls(camera,renderer.domElement);
@@ -132,9 +136,67 @@ export default function AnatomyScene({atlas,state,rtl=false,partName,messages,on
    if(dirty){renderer.render(scene,camera);targets=[];if(amount>.45){atlas.parts.forEach((p,i)=>{if(data[i*4+3]<.5)return;let left=Infinity,right=-Infinity,top=Infinity,bottom=-Infinity;for(let corner=0;corner<8;corner++){projected.set(p.bounds[(corner&1)?1:0][0]+data[i*4],p.bounds[(corner&2)?1:0][1]+data[i*4+1],p.bounds[(corner&4)?1:0][2]+data[i*4+2]).project(camera);const x=(projected.x+1)*el.clientWidth/2,y=(1-projected.y)*el.clientHeight/2;left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}projected.copy(centers[i]).add(new T.Vector3(data[i*4],data[i*4+1],data[i*4+2])).project(camera);if(projected.z< -1||projected.z>1)return;targets.push({index:i,x:(projected.x+1)*el.clientWidth/2,y:(1-projected.y)*el.clientHeight/2,left,right,top,bottom});});}dirty=false;}
 
   };animate();
+  captureFn.current=async(request)=>{
+   if(disposed||!ready)throw new Error('not-ready');
+   const s=latest.current;
+   const selection=new Set(s.selected);
+   const isolate=request.scope==='selection'&&selection.size>0;
+   const transparent=isolate&&request.format==='png';
+   hover.hidden=true;
+   const savedView=camera.view?{fullWidth:camera.view.fullWidth,fullHeight:camera.view.fullHeight,offsetX:camera.view.offsetX,offsetY:camera.view.offsetY,width:camera.view.width,height:camera.view.height}:null;
+   const saved={
+    position:camera.position.clone(),
+    target:controls.target.clone(),
+    maxDistance:controls.maxDistance,
+    pixelRatio:renderer.getPixelRatio(),
+    clear:renderer.getClearColor(new T.Color()).getHex(),
+    alpha:renderer.getClearAlpha(),
+    ground:ground.visible,
+    platform:platform.visible,
+    ring:ring.visible,
+    innerRing:innerRing.visible,
+    markers:markers.visible,
+    data:data.slice(),
+    selected:selectedData.slice(),
+   };
+   const restore=()=>{
+    data.set(saved.data);selectedData.set(saved.selected);partTexture.needsUpdate=true;selectionTexture.needsUpdate=true;
+    atlas.parts.forEach((p,i)=>{const mesh=pickers[i];if(mesh){mesh.position.set(saved.data[i*4],saved.data[i*4+1],saved.data[i*4+2]);mesh.updateMatrix();mesh.updateMatrixWorld(true);}});
+    ground.visible=saved.ground;platform.visible=saved.platform;ring.visible=saved.ring;innerRing.visible=saved.innerRing;markers.visible=saved.markers;
+    renderer.setClearColor(saved.clear,saved.alpha);renderer.setPixelRatio(saved.pixelRatio);renderer.setSize(el.clientWidth,el.clientHeight,false);
+    camera.position.copy(saved.position);controls.target.copy(saved.target);controls.maxDistance=saved.maxDistance;
+    if(savedView)camera.setViewOffset(savedView.fullWidth,savedView.fullHeight,savedView.offsetX,savedView.offsetY,savedView.width,savedView.height);
+    else camera.clearViewOffset();
+    camera.updateProjectionMatrix();controls.update();dirty=true;
+   };
+   try{
+    renderer.setPixelRatio(Math.min(2.5,Math.max(2,devicePixelRatio||1)));
+    renderer.setSize(el.clientWidth,el.clientHeight,false);
+    if(isolate){
+     atlas.parts.forEach((p,i)=>{data.set([0,0,0,selection.has(p.id)?1:0],i*4);selectedData[i*4]=0;const mesh=pickers[i];if(mesh){mesh.position.set(0,0,0);mesh.updateMatrix();mesh.updateMatrixWorld(true);}});
+     partTexture.needsUpdate=true;selectionTexture.needsUpdate=true;
+     ground.visible=platform.visible=ring.visible=innerRing.visible=markers.visible=false;
+     camera.clearViewOffset();
+     const box=new T.Box3();
+     atlas.parts.forEach((p,i)=>{if(selection.has(p.id))box.union(bounds[i]);});
+     if(!box.isEmpty()){
+      const center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
+      const distance=Math.max(.07,Math.max(size.y,size.x/Math.max(.35,camera.aspect),size.z)/(2*Math.tan(T.MathUtils.degToRad(camera.fov/2)))*1.45);
+      controls.target.copy(center);camera.position.copy(center).add(new T.Vector3(.22,.12,1).normalize().multiplyScalar(distance));camera.updateMatrixWorld(true);
+     }
+    }else{
+     selectedData.fill(0);selectionTexture.needsUpdate=true;
+    }
+    if(transparent)renderer.setClearColor(0x000000,0);
+    else renderer.setClearColor('#f2f3f3',1);
+    renderer.render(scene,camera);
+    return copyCanvas(renderer.domElement);
+   }finally{restore();}
+  };
   const contextLost=(e:Event)=>{e.preventDefault();onError(copy.current.contextLost);};renderer.domElement.addEventListener('webglcontextlost',contextLost);
-  return()=>{disposed=true;abort.abort();cancelAnimationFrame(frame);observer.disconnect();controls.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());scene.traverse(o=>{if(o instanceof T.Mesh&&!geometries.includes(o.geometry)){o.geometry.dispose();const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>m.dispose());}});env.dispose();partTexture.dispose();selectionTexture.dispose();markerGeometry.dispose();markerMaterial.dispose();hover.remove();renderer.dispose();renderer.domElement.remove();};
+  return()=>{disposed=true;captureFn.current=async()=>{throw new Error('not-ready');};abort.abort();cancelAnimationFrame(frame);observer.disconnect();controls.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());scene.traverse(o=>{if(o instanceof T.Mesh&&!geometries.includes(o.geometry)){o.geometry.dispose();const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>m.dispose());}});env.dispose();partTexture.dispose();selectionTexture.dispose();markerGeometry.dispose();markerMaterial.dispose();hover.remove();renderer.dispose();renderer.domElement.remove();};
  },[atlas]);
  useEffect(()=>{const canvas=host.current?.querySelector('canvas');if(canvas)canvas.setAttribute('aria-label',messages.canvasAria);},[messages.canvasAria]);
  return <div className="scene" ref={host}/>;
-}
+});
+export default AnatomyScene;
